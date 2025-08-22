@@ -1,7 +1,7 @@
 import { createGalaxyApi } from "@galaxyproject/galaxy-api-client";
 import { type components } from "@galaxyproject/galaxy-api-client";
 
-const GALAXY_URL = process.env.GALAXY_URL || "https://usegalaxy.org";
+const GALAXY_URL = process.env.GALAXY_URL || "https://usegalaxy.eu";
 const API_KEY = process.env.GALAXY_API_KEY;
 const HISTORY_ID = process.argv[2];
 
@@ -9,7 +9,9 @@ const HISTORY_ID = process.argv[2];
 const DEFAULT_PUE = 1.67;
 const MEMORY_POWER_USAGE_CONSTANT = 0.375; // W/GiB
 const DEFAULT_CARBON_INTENSITY = 475; // gCO2/kWh (global average)
-const DEFAULT_CPU_TDP = 165; // Watts (default TDP for server CPU)
+const DEFAULT_CPU_TDP = 240; // Watts (default TDP Xeon Platinum 8175M)
+const DEFAULT_CPU_CORES = 24; // Cores (default for Xeon Platinum 8175M)
+const DEFAULT_TDP_PER_CORE = DEFAULT_CPU_TDP / DEFAULT_CPU_CORES; // Watts (total guesstimate)
 
 // Configuration from environment variables
 const PUE = parseFloat(process.env.PUE || DEFAULT_PUE.toString());
@@ -66,10 +68,10 @@ function calculateCarbonEmissions(metrics: components["schemas"]["JobMetric"][])
   const runtimeHours = parseRuntimeToHours(runtimeSeconds);
 
   // Calculate power usage
-  const tdpPerCore = CPU_TDP / coresAllocated; // Assuming TDP is for the allocated cores
-  const normalizedTdpPerCore = tdpPerCore * coresAllocated;
+  // const tdpPerCore = CPU_TDP / totalCores; // we don't have the total cores ...
+  const totalTdp = DEFAULT_TDP_PER_CORE * coresAllocated;
 
-  const powerNeededCpu = PUE * normalizedTdpPerCore;
+  const powerNeededCpu = PUE * totalTdp;
   const powerNeededMemory =
     PUE * memoryAllocatedGb * MEMORY_POWER_USAGE_CONSTANT;
   const totalPowerNeeded = powerNeededCpu + powerNeededMemory;

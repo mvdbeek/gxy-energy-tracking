@@ -11,6 +11,7 @@ A TypeScript script that fetches job metrics for all jobs in a Galaxy workflow h
   - Runtime information (start/end times, duration)
   - Resource usage statistics (CPU time, memory peak)
   - System metrics (cgroup data)
+- Calculates very rough CO2 and energy consumption estimates
 
 ## Prerequisites
 
@@ -35,7 +36,7 @@ npm install -g tsx
 The script uses environment variables for configuration:
 
 - `GALAXY_API_KEY` (required): Your Galaxy API key
-- `GALAXY_URL` (optional): Galaxy server URL (defaults to https://usegalaxy.org)
+- `GALAXY_URL` (optional): Galaxy server URL (defaults to https://usegalaxy.eu)
 
 ### Getting Your API Key
 
@@ -93,7 +94,7 @@ Job 11ac94870d0bb33ab17aa9acd48a28fd (toolshed.g2.bx.psu.edu/repos/iuc/dropletut
 ## Finding Your History ID
 
 1. In Galaxy, go to your workflow history
-2. Look at the URL in your browser: `https://usegalaxy.org/histories/view?id=HISTORY_ID_HERE`
+2. Look at the URL in your browser: `https://usegalaxy.eu/histories/view?id=HISTORY_ID_HERE`
 3. Copy the ID from the URL
 
 ## Error Handling
