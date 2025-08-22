@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@galaxyproject/galaxy-api-client": "^25.0.0-dev.0"
+  }
+}
